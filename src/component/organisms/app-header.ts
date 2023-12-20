@@ -1,4 +1,4 @@
-import { Component } from '../../../core/decorator';
+import { Component } from '../../core/decorator';
 
 @Component('app-header')
 export default class AppHeader {

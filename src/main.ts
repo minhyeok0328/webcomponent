@@ -1,4 +1,4 @@
-import './src/App.ts';
+import './App.ts';
 
 const root: HTMLElement = document.querySelector('#app')!;
 

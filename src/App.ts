@@ -1,5 +1,7 @@
-import { Component } from '../core/decorator';
+import { Component } from './core/decorator';
+import { html } from './core/dom';
 import './component/organisms';
+import './component/atoms';
 
 @Component('app-component')
 export default class AppComponent {
@@ -14,9 +16,14 @@ export default class AppComponent {
   `;
 
   render() {
-    return `
+    return html`
       <app-header></app-header>
-      <div>안녕하세요</div>
+      <div>
+        안녕하세요
+        <app-button
+          size="100"
+        />
+      </div>
       <app-footer></app-footer>
     `;
   }

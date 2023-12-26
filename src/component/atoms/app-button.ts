@@ -11,7 +11,7 @@ export default class AppButton implements ComponentType {
   `;
 
   componentDidMount() {
-    // console.log(this.props);
+    console.log(this.props);
   }
 
   render() {

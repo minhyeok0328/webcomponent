@@ -1,5 +1,4 @@
 import { Component } from './core/decorator';
-import { html } from './core/dom';
 import './component/organisms';
 import './component/atoms';
 
@@ -15,13 +14,18 @@ export default class AppComponent {
     ul { display: none; }
   `;
 
+  test() {
+    console.log('asd');
+  }
+
   render() {
-    return html`
+    return `
       <app-header></app-header>
       <div>
         안녕하세요
         <app-button
           size="100"
+          @click="${this.test}"
         />
       </div>
       <app-footer></app-footer>

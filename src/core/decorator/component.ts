@@ -5,58 +5,52 @@
 
 import { ComponentType } from '../type';
 
-export default function Component(name: string) {
-  return (Target: new (...args: unknown[]) => ComponentType) => {
-    const component = new Target();
+const Component = (componentName: string) => (Target: new (...args: unknown[]) => ComponentType) => {
+  const component = new Target();
 
-    if (!component.render) {
-      throw new Error('The class declared "@component" must have a render function defined.');
+  class CustomComponent extends HTMLElement {
+    constructor() {
+      super();
+
+      const shadow = this.attachShadow({ mode: 'open' });
+
+      shadow.innerHTML = `
+        <style>
+          ${component?.style}
+        </style>
+        ${component.render()}
+      `;
     }
 
-    class CustomComponent extends HTMLElement {
-      constructor() {
-        super();
+    get props() {
+      const propsObject: { [key: string]: string } = {};
+      const { attributes } = this;
 
-        const shadow = this.attachShadow({ mode: 'open' });
+      [...attributes].forEach(({ name, value }: Attr) => {
+        propsObject[name] = value;
+      });
 
-        shadow.innerHTML = `
-          <style>
-            ${component?.style}
-          </style>
-          ${component.render()}
-        `;
-      }
-
-      get props() {
-        const propsObject: { [key: string]: string } = {};
-        const { attributes } = this;
-
-        Object
-          .entries({ ...attributes })
-          .forEach(([attributeName, value]) => {
-            propsObject[attributeName] = String(value);
-          });
-
-        return propsObject;
-      }
-
-      connectedCallback() {
-        component?.componentDidMount?.call(this);
-      }
-
-      disconnectedCallback() {
-        component?.componentWillUnmount?.call(this);
-      }
-
-      adoptedCallback() {
-        component?.componentMovePage?.call(this);
-      }
-
-      attributeChangedCallback() {
-        component?.componentDidUpdate?.call(this);
-      }
+      return propsObject;
     }
 
-    customElements.define(name, CustomComponent);
-  };
-}
+    connectedCallback() {
+      component?.componentDidMount?.call(this);
+    }
+
+    disconnectedCallback() {
+      component?.componentWillUnmount?.call(this);
+    }
+
+    adoptedCallback() {
+      component?.componentMovePage?.call(this);
+    }
+
+    attributeChangedCallback() {
+      component?.componentDidUpdate?.call(this);
+    }
+  }
+
+  customElements.define(componentName, CustomComponent);
+};
+
+export default Component;

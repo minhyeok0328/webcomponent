@@ -12,6 +12,7 @@
     "@typescript-eslint"
   ],
   "rules": {
+    "max-len": ["error", { "code": 150, "tabWidth": 4 }],
     "semi": [
       "error",
       "always"

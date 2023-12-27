@@ -13,10 +13,4 @@ export default class AppButton implements ComponentType {
   componentDidMount() {
     console.log(this.props);
   }
-
-  render() {
-    return `
-      <button>안녕</button>
-    `;
-  }
 }

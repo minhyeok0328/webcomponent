@@ -4,53 +4,10 @@
 // attributeChangedCallback(): 속성이 변경, 추가, 제거 또는 교체될 때 호출됩니다.
 
 import { ComponentType } from '../type';
+import { webComponent } from '../dom';
 
 const Component = (componentName: string) => (Target: new (...args: unknown[]) => ComponentType) => {
-  const component = new Target();
-
-  class CustomComponent extends HTMLElement {
-    constructor() {
-      super();
-
-      const shadow = this.attachShadow({ mode: 'open' });
-
-      shadow.innerHTML = `
-        <style>
-          ${component?.style}
-        </style>
-        ${component.render()}
-      `;
-    }
-
-    get props() {
-      const propsObject: { [key: string]: string } = {};
-      const { attributes } = this;
-
-      [...attributes].forEach(({ name, value }: Attr) => {
-        propsObject[name] = value;
-      });
-
-      return propsObject;
-    }
-
-    connectedCallback() {
-      component?.componentDidMount?.call(this);
-    }
-
-    disconnectedCallback() {
-      component?.componentWillUnmount?.call(this);
-    }
-
-    adoptedCallback() {
-      component?.componentMovePage?.call(this);
-    }
-
-    attributeChangedCallback() {
-      component?.componentDidUpdate?.call(this);
-    }
-  }
-
-  customElements.define(componentName, CustomComponent);
+  webComponent({ componentName, Component: Target });
 };
 
 export default Component;

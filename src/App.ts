@@ -25,7 +25,6 @@ export default class AppComponent {
         안녕하세요
         <app-button
           size="100"
-          @click="${this.test}"
         />
       </div>
       <app-footer></app-footer>
